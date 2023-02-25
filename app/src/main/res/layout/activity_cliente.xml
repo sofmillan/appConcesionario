@@ -109,6 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginLeft="14dp"
+            android:onClick="Cancelar"
             android:layout_weight="1"
             android:textSize="20dp"
             android:text="Cancelar" />
