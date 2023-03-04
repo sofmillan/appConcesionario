@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+//Para ingresar datos pasamos por el content values y luego ingresa a la base de datos -> insert into
+//Para leer usamos la tabla cursor -> select
 public class ClienteActivity extends AppCompatActivity {
 
     EditText jetidentificacion, jetnombre,jetcorreo;
@@ -34,6 +36,8 @@ public class ClienteActivity extends AppCompatActivity {
         jcbactivo = findViewById(R.id.cbactivo);
         sw=0;
     }
+
+
 
     public void guardar(View view){
         identificacion = jetidentificacion.getText().toString();
@@ -69,6 +73,9 @@ public class ClienteActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     public void Consultar(View view){
         identificacion= jetidentificacion.getText().toString();
         if(!identificacion.isEmpty()){
@@ -91,10 +98,31 @@ public class ClienteActivity extends AppCompatActivity {
     }
 
 
+    public void Anular(View view){
+        if(sw == 1){ //si es 1 es pq lo buscó y lo encontró
+            sw=0;
+            SQLiteDatabase db = admin.getWritableDatabase();
+            ContentValues registro = new ContentValues();
+            registro.put("activo","No");
+            respuesta = db.update("TblCliente",registro,"identificacion='"+identificacion+"'",null);
+            if(respuesta>0){ //si es mayor a 0 es porque lo pudo hacer
+                Toast.makeText(this, "Registro anulado", Toast.LENGTH_SHORT).show();
+                limpiar_campos();
+            }else{
+                Toast.makeText(this, "Error, no se pudo anular registro", Toast.LENGTH_SHORT).show();
+            }
+            db.close();
+        }else{
+            Toast.makeText(this, "Primero debe consultar", Toast.LENGTH_SHORT).show();
+            jetidentificacion.requestFocus();
+        }
+    }
+
+
+
     public void Cancelar(View view){
         limpiar_campos();
     }
-
 
     private void limpiar_campos(){
         jetidentificacion.setText("");
@@ -105,3 +133,4 @@ public class ClienteActivity extends AppCompatActivity {
         sw=0;
     }
 }
+
